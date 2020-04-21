@@ -1,6 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, EqualTo
+#wtform 에서 제공하는 폼을 사용.
+#유효성 검사 제공.
+
 
 class RegistForm(FlaskForm):
     #회원가입
@@ -14,4 +17,4 @@ class RegistForm(FlaskForm):
     confirm_pswd = PasswordField('confirm_pswd_label',
             validators=[InputRequired(message="사용 할 수 없는 패스워드입니다."),
             EqualTo('password', message="패스워드가 일치하지 않습니다.")])
-    submit_button = SubmitField('Create')
+    submit_button = SubmitField('회원가입')
