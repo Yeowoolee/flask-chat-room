@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, session, flash
 from flask_pymongo import PyMongo
 #Flask-PyMongo==2.3.0
 from flask_bcrypt import Bcrypt
@@ -8,7 +8,7 @@ from wtform import *
 
 app = Flask(__name__)
 app.secret_key = 'mysecret'
-app.config['MONGO_URI'] = "mongodb+srv://jinho0217:test@cluster0-klwld.gcp.mongodb.net/Flask_Chat_Room?retryWrites=true&w=majority"
+app.config['MONGO_URI'] = ""
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 
@@ -31,6 +31,7 @@ def index():
         myuser.insert_one(db_data)
 
         #회원가입 성공시 로그인 창으로
+        flash('회원가입 성공!', 'success')
         return redirect(url_for('login'))
         
     return render_template("index.html", form=reg_form)
@@ -47,7 +48,8 @@ def login():
         if existing_user:
             pw_check = bcrypt.check_password_hash(existing_user['password'], password)    
             if pw_check:
-                return '로그인 성공'
+                session['username'] = username
+                return f"로그인 성공! 환영합니다. {session['username']} 님"
             else:
                 msg += '패스워드 입니다.'
                 return msg
@@ -56,6 +58,19 @@ def login():
             return msg
     return render_template("login.html", form=login_form)
 
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.pop('username', None)
+    flash('로그아웃 되었습니다.', 'success')
+    return redirect(url_for('login'))
+
+@app.route("/chat", methods=["GET", "POST"])
+def chat():
+    if 'username' in session:
+        return "chat 접속 성공"
+    else:
+        flash('로그인이 필요한 페이지입니다.', 'danger')
+        return redirect(url_for('login'))
 
 if __name__ == "__main__":
     app.run(debug=True)
