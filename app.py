@@ -1,4 +1,7 @@
+from time import localtime, strftime
 from flask import Flask, render_template, redirect, url_for, session, flash
+
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_pymongo import PyMongo
 #Flask-PyMongo==2.3.0
 from flask_bcrypt import Bcrypt
@@ -8,7 +11,11 @@ from wtform import *
 
 app = Flask(__name__)
 app.secret_key = 'mysecret'
-app.config['MONGO_URI'] = ""
+app.config['MONGO_URI'] = "mongodb+srv://jinho0217:test@cluster0-klwld.gcp.mongodb.net/Flask_Chat_Room?retryWrites=true&w=majority"
+
+socketio = SocketIO(app)
+ROOMS = ['lobby', 'games', 'news']
+
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 
@@ -66,11 +73,35 @@ def logout():
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
-    if 'username' in session:
-        return "chat 접속 성공"
-    else:
-        flash('로그인이 필요한 페이지입니다.', 'danger')
-        return redirect(url_for('login'))
+    # if 'username' in session:
+    #     return "chat 접속 성공"
+    # else:
+    #     flash('로그인이 필요한 페이지입니다.', 'danger')
+    #     return redirect(url_for('login'))
+    return render_template("chat.html", username=session['username'],
+        rooms=ROOMS)
+
+
+@socketio.on('message')
+def message(data):
+    print(f"\n\n{data}\n\n")
+    send({'msg': data['msg'], 'username': data['username'],'time_stamp': strftime('%b-%d %I:%M%p', localtime())}, room=data['room'])
+    
+@socketio.on('join')
+def join(data):
+
+    join_room(data['room'])
+    send({'msg':data['username'] + "님이 " + data['room'] + 
+    "에 들어왔습니다."}, room=data['room'])
+
+@socketio.on('leave')
+def leave(data):
+
+    leave_room(data['room'])
+    send({'msg':data['username'] + "님이 " + data['room'] + 
+    "에서 나갔습니다."}, room=data['room'])
+
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True)

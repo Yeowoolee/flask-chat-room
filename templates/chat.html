@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <nav>
+
+    </nav>
+    <div id="main-section">
+        <!-- 채팅 방 선택 -->
+        <nav id="sidebar">
+            <h4>채팅 Room</h4>
+            {% for room in rooms %}
+                <p class='select-room'>{{ room|title }}</p>
+            {% endfor %}
+
+
+        </nav>
+        <!-- 메시지 창 -->
+        <div id="rightside-pannel">
+            <!-- 메시지 보여주는 창 -->
+            <div id="display-message-section">
+
+            </div>
+            <!-- 메시지 입력 부분 -->
+            <div id="input-area">
+                <input type="text" id="user_message" placeholder="메시지 입력">
+                <button type="button" id="send_message">SEND</button>
+            </div>
+        </div>
+
+    </div>
+    <!-- 유저 이름 -->
+    <script type="text/javascript">
+        const username = `{{ username }}`;
+    </script>
+    <!-- 엔터키로 전송 -->
+    <script src="{{ url_for('static', filename='scripts/chat_page.js') }}"></script>
+    <!-- socketIO -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <!-- socketIO 커스텀 -->
+    <script src="{{ url_for('static', filename='scripts/socketio.js') }}"></script>
+</body>
+</html>
