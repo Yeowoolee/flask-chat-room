@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title></title>
 </head>
 <body>
@@ -10,26 +11,40 @@
     <nav>
 
     </nav>
-    <div id="main-section">
+    
+    <div id="main-section" class='row ml-1 mr-1 mt-5'>
         <!-- 채팅 방 선택 -->
-        <nav id="sidebar">
-            <h4>채팅 Room</h4>
+        <div class="col-4">
+            <a class="navbar-brand" href="#">채팅방</a>
+            
+            <div id="nav list-example" class="list-group">
             {% for room in rooms %}
-                <p class='select-room'>{{ room|title }}</p>
+                <a class='select-room list-group-item list-group-item-action'>{{ room|title }}</a>
             {% endfor %}
-
-
-        </nav>
-        <!-- 메시지 창 -->
-        <div id="rightside-pannel">
-            <!-- 메시지 보여주는 창 -->
-            <div id="display-message-section">
-
+ 
             </div>
+        </div>
+        <div class="col-8">
+            <!-- 메시지 창 -->
+            <div id="rightside-pannel">
+                
+            
+                    <!-- 메시지 보여주는 창 -->
+                    <div id="display-message-section" style="overflow:scroll; height:750px; overflow-x:hidden">
+
+                    </div>
+
+              
+        
+
             <!-- 메시지 입력 부분 -->
-            <div id="input-area">
-                <input type="text" id="user_message" placeholder="메시지 입력">
-                <button type="button" id="send_message">SEND</button>
+            <div id="input-area" class="input-group mb-3">
+                <input type="text" id="user_message" class="form-control" placeholder="메시지 입력" aria-label="Recipient's username" aria-describedby="button-addon2">
+
+                <div class="input-group-append">
+                    <button id="send_message" class="btn btn-outline-secondary" type="button" id="button-addon2">SEND</button>
+                </div>
+
             </div>
         </div>
 

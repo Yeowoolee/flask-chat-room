@@ -21,7 +21,30 @@ bcrypt = Bcrypt(app)
 
 myuser = mongo.db.users #유저 데이터베이스
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=['GET', 'POST'])
+def login():
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        username = login_form.username.data
+        password = login_form.password.data
+        msg = '등록되지 않은 '
+        #등록 아이디 체크
+        existing_user = myuser.find_one({'username' : username})
+        if existing_user:
+            pw_check = bcrypt.check_password_hash(existing_user['password'], password)    
+            if pw_check:
+                session['username'] = username
+                return redirect(url_for('chat'))
+            else:
+                msg += '패스워드 입니다.'
+                return msg
+        else:
+            msg += '아이디 입니다.'
+            return msg
+    return render_template("index.html", form=login_form)
+
+
+@app.route('/regist', methods=['GET', 'POST'])
 def index():
     reg_form = RegistForm()
     if reg_form.validate_on_submit():
@@ -39,52 +62,32 @@ def index():
 
         #회원가입 성공시 로그인 창으로
         flash('회원가입 성공!', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
         
-    return render_template("index.html", form=reg_form)
+    return render_template("regist.html", form=reg_form)
 
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    login_form = LoginForm()
-    if login_form.validate_on_submit():
-        username = login_form.username.data
-        password = login_form.password.data
-        msg = '등록되지 않은 '
-        #등록 아이디 체크
-        existing_user = myuser.find_one({'username' : username})
-        if existing_user:
-            pw_check = bcrypt.check_password_hash(existing_user['password'], password)    
-            if pw_check:
-                session['username'] = username
-                return f"로그인 성공! 환영합니다. {session['username']} 님"
-            else:
-                msg += '패스워드 입니다.'
-                return msg
-        else:
-            msg += '아이디 입니다.'
-            return msg
-    return render_template("login.html", form=login_form)
 
 @app.route('/logout', methods=['GET'])
 def logout():
     session.pop('username', None)
     flash('로그아웃 되었습니다.', 'success')
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
-    # if 'username' in session:
-    #     return "chat 접속 성공"
-    # else:
-    #     flash('로그인이 필요한 페이지입니다.', 'danger')
-    #     return redirect(url_for('login'))
+    if 'username' in session:
+        return render_template("chat.html", username=session['username'],
+        rooms=ROOMS)
+    else:
+        flash('로그인이 필요한 페이지입니다.', 'danger')
+        return redirect(url_for('index'))
     return render_template("chat.html", username=session['username'],
         rooms=ROOMS)
 
 
 @socketio.on('message')
 def message(data):
-    print(f"\n\n{data}\n\n")
+    #print(f"\n\n{data}\n\n")
     send({'msg': data['msg'], 'username': data['username'],'time_stamp': strftime('%b-%d %I:%M%p', localtime())}, room=data['room'])
     
 @socketio.on('join')

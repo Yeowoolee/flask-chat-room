@@ -2,23 +2,31 @@
 
 {% extends "login-layout.html" %}
 
-{% block title %}회원가입{% endblock %}
+{% block title %}로그인{% endblock %}
 
 {% block content %}
-    <h1>시작하기</h1>
 
-    <form action="{{ url_for('index') }}", method="POST">
-        
+
+<form class="px-4 py-3" action="{{ url_for('login') }}" method="POST">
+    <h2>로그인</h2>
+    <p>아이디 / 패스워드를 입력하세요.</p>
         {{ displayField(form.username, '아이디', autocomplete="off",
-            autofocus=true)}}
-        {{ displayField(form.password, '비밀번호')}}
-        {{ displayField(form.confirm_pswd, '비밀번호 재입력')}}
+        autofocus=true)}}
+    {{ displayField(form.password, '비밀번호')}}
+    
 
-        <div>
-            {{ form.submit_button }}
-        </div>
+    <div>
+       
+        {{ form.submit_button(class_="btn btn-primary") }}
+    </div>
 
-        {{ form.csrf_token }}
-
+    {{ form.csrf_token }}
     </form>
+    <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="regist">아직 회원이 아닌가요?</a>
+    
+</div>
 {% endblock %}
+
+
+

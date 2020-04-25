@@ -1,0 +1,26 @@
+{% from "form_Structure.html" import displayField %}
+
+{% extends "login-layout.html" %}
+
+{% block title %}회원가입{% endblock %}
+
+{% block content %}
+<form class="px-4 py-3" action="{{ url_for('index') }}", method="POST">
+    <h1>시작하기</h1>
+        
+        {{ displayField(form.username, '아이디', autocomplete="off",
+            autofocus=true)}}
+        {{ displayField(form.password, '비밀번호')}}
+        {{ displayField(form.confirm_pswd, '비밀번호 재입력')}}
+
+        <div>
+            {{ form.submit_button(class_="btn btn-primary") }}
+        </div>
+
+        {{ form.csrf_token }}
+
+    </form>
+    <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/">이미 가입을 하셨나요?</a>
+</div>
+{% endblock %}
