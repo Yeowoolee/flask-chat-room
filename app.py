@@ -1,6 +1,6 @@
+import os
 from time import localtime, strftime
 from flask import Flask, render_template, redirect, url_for, session, flash
-
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_pymongo import PyMongo
 #Flask-PyMongo==2.3.0
@@ -10,8 +10,8 @@ from wtform import *
 
 
 app = Flask(__name__)
-app.secret_key = 'mysecret'
-app.config['MONGO_URI'] = "mongodb+srv://jinho0217:test@cluster0-klwld.gcp.mongodb.net/Flask_Chat_Room?retryWrites=true&w=majority"
+app.secret_key = os.environ['APP_KEY']
+app.config['MONGO_URI'] = os.environ['MONGO_KEY']
 
 socketio = SocketIO(app)
 ROOMS = ['lobby', 'games', 'news']
@@ -107,4 +107,4 @@ def leave(data):
 
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    socketio.run(app)
