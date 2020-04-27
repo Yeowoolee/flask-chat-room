@@ -6,10 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.keyCode === 13) {
             document.querySelector('#send_message').click();
             
-            $("#display-message-section").animate({
-	            scrollTop: 1000
-            }, 500);
-           
         }
+        
     })
 })

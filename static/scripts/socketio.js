@@ -9,14 +9,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const span_username = document.createElement('span');
         const span_timestamp = document.createElement('span');
         const br = document.createElement('br');
-
+        const div = document.createElement('div')
+        div.setAttribute("class", "row");
         if (data.username){
+            if (data.username === username){
+                // 이름이 같을 경우
+                
+                p.setAttribute("class", "card col-md-5 ml-auto");
+                span_username.innerHTML = data.username;
+                span_timestamp.innerHTML = data.time_stamp
+                p.innerHTML = span_username.outerHTML + br.outerHTML
+                                             + data.msg + br.outerHTML + span_timestamp.outerHTML;
+                div.innerHTML = p.outerHTML                       
+                document.querySelector("#display-message-section").append(div);
 
-            span_username.innerHTML = data.username;
-            span_timestamp.innerHTML = data.time_stamp
-            p.innerHTML = span_username.outerHTML + br.outerHTML
-                                         + data.msg + br.outerHTML + span_timestamp.outerHTML;
-            document.querySelector("#display-message-section").append(p);
+            } else{
+                p.setAttribute("class", "card col-md-5");
+                span_username.innerHTML = data.username;
+                span_timestamp.innerHTML = data.time_stamp
+                p.innerHTML = span_username.outerHTML + br.outerHTML
+                                             + data.msg + br.outerHTML + span_timestamp.outerHTML;
+                document.querySelector("#display-message-section").append(p);
+            }
         }else{
             printSyMsg(data.msg);
         }
@@ -28,6 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
          'username': username, 'room': room});
          // input 내용 지우기
         document.querySelector('#user_message').value = '';
+        //스크롤바 내리기
+        document.querySelector("#display-message-section").scrollTop = document.querySelector("#display-message-section").scrollHeight;
+        
+    
     }
 
     // 채팅 방 변경
