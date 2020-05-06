@@ -220,15 +220,4 @@ csrf\_token는 form의 보안을 위해 사용했습니다.
 AWS는 Heroku와는 다르게 터미널을 사용이 조금 더 많고 필요한 라이브러리를 일일히 설치해야 하는 번거로움이 있습니다. 하지만 자잘한 오류가 적고 Procfile을 사용하지 않아도 되기 때문에 테스트 환경에서 오류 없이 실행되었다면 AWS에 파일만 그대로 옮긴 후 라이브러리를 설치하고 Flask를 실행시키면 배포가 완료됩니다.
 
 Flask의 AWS 배포에 관한 내용은 아래 게시글에 정리되어 있습니다.
-
-[
-
-Flask를 AWS에 Deploy하기
-
-1\. Deploy 하기 전 준비 github에 작업한 프로젝트 파일 push AWS회원가입(AWS는 12개월 프리티어를 지원합니다.) 아마존 클라우드 서버 호스팅 | Amazon Web Services AWS Nitro 시스템 AWS Nitro 시스템은 차세..
-
-yeowool0217.tistory.com
-
-
-
-](https://yeowool0217.tistory.com/620)
+https://yeowool0217.tistory.com/620
